@@ -47,6 +47,7 @@
     <Compile Include="IBehaviourTreeCompositeNode.cs" />
     <Compile Include="IBehaviourTreeNode.cs" />
     <Compile Include="Nodes\ActionNode.cs" />
+    <Compile Include="Nodes\DecoratorNodeBase.cs" />
     <Compile Include="Nodes\SelectNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
