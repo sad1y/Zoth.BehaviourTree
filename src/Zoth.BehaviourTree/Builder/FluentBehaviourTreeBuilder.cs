@@ -19,7 +19,7 @@ namespace Zoth.BehaviourTree.Builder
 
             _root = node ?? throw new ArgumentNullException(nameof(node));
 
-            return this;
+            return new BehaviourTreeCompositeNodeBuilder<TTickData, TState>(_root);
         }
 
         public IBehaviourTreeBuilder<TTickData, TState> End()

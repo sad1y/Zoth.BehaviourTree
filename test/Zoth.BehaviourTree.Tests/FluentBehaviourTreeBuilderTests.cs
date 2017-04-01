@@ -71,5 +71,26 @@ namespace Zoth.BehaviourTree.Tests
             Assert.NotNull(action);
             Assert.Equal(BehaviourTreeState.Running, action(1, 1));
         }
+
+        [Fact]
+        public void SetupNestedTree()
+        {
+            var builder = new FluentBehaviourTreeBuilder<int, int>();
+            var moqAction = new Mock<IBehaviourTreeCompositeNode<int, int>>();
+            var moqProfile = new Mock<IActionProfiler<int>>();
+
+            moqAction.Setup(f => f.Compile()).Returns((time, state) => BehaviourTreeState.Running);
+
+            var subtreeBuilder = builder
+                .Add(moqAction.Object)
+                    .Add(moqAction.Object)
+                        .Add(moqAction.Object)
+                        .End()
+                    .Add(moqAction.Object)
+                    .End();
+
+            Assert.NotEqual(builder, subtreeBuilder);
+            Assert.Equal(subtreeBuilder, subtreeBuilder.End());
+        }
     }
 }
