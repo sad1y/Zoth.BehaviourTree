@@ -22,7 +22,16 @@ namespace Zoth.BehaviourTree.Nodes
 
         public Func<TTickData, TState, BehaviourTreeState> Compile()
         {
-            throw new NotImplementedException();
+            return (tick, state) =>
+            {
+                Profiler?.LogExecutingAction(0, Name, tick);
+
+                var nodeState = _action(tick, state);
+
+                Profiler?.LogExecutedAction(0, Name, tick, nodeState);
+
+                return nodeState;
+            };
         }
     }
 }
