@@ -1,7 +1,7 @@
 ﻿using System;
 using Zoth.BehaviourTree.Exceptions;
 
-namespace Zoth.BehaviourTree.Builder
+namespace Zoth.BehaviourTree.Builders
 {
     public class FluentBehaviourTreeBuilder<TTickData, TState> : IBehaviourTreeBuilder<TTickData, TState>
     {

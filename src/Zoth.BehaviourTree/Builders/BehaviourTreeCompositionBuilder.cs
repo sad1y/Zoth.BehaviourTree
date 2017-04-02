@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Zoth.BehaviourTree.Builder
+namespace Zoth.BehaviourTree.Builders
 {
     internal class BehaviourTreeCompositeNodeBuilder<TTickData, TState> : IBehaviourTreeBuilder<TTickData, TState>
     {

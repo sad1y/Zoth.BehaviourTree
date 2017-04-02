@@ -38,9 +38,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BehaviourTreeState.cs" />
-    <Compile Include="Builder\BehaviourTreeCompositionBuilder.cs" />
-    <Compile Include="Builder\IBehaviourTreeBuilder.cs" />
-    <Compile Include="Builder\FluentBehaviourTreeBuilder.cs" />
+    <Compile Include="Builders\BehaviourTreeCompositionBuilder.cs" />
+    <Compile Include="Builders\IBehaviourTreeBuilder.cs" />
+    <Compile Include="Builders\FluentBehaviourTreeBuilder.cs" />
+    <Compile Include="Compilation\CallChainCompiler.cs" />
+    <Compile Include="Exceptions\BehaviourTreeCompilationFailedException.cs" />
     <Compile Include="Exceptions\BehaviourTreeBuilderFailedException.cs" />
     <Compile Include="Extentions\BehaviourTreeBuilderExtentions.cs" />
     <Compile Include="IActionProfiler.cs" />
@@ -50,10 +52,21 @@
     <Compile Include="Nodes\DecoratorNodeBase.cs" />
     <Compile Include="Nodes\SelectNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\ExceptionMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExceptionMessages.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ExceptionMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

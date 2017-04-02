@@ -1,6 +1,6 @@
 ﻿using Moq;
 using Xunit;
-using Zoth.BehaviourTree.Builder;
+using Zoth.BehaviourTree.Builders;
 using Zoth.BehaviourTree.Exceptions;
 using Zoth.BehaviourTree.Extentions;
 

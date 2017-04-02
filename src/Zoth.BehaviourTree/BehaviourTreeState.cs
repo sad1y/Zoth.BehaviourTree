@@ -2,9 +2,9 @@
 {
     public enum BehaviourTreeState
     {
-        Success = 0,
-        Running = 1,
-        Failure = 2,
-        Error = 3
+        Success = 1,
+        Running = 2,
+        Failure = 3,
+        Error = 4
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Zoth.BehaviourTree.Builder
+﻿namespace Zoth.BehaviourTree.Builders
 {
     public interface IBehaviourTreeBuilder<TTickData, TState>
     {

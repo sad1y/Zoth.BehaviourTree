@@ -1,5 +1,5 @@
 ﻿using System;
-using Zoth.BehaviourTree.Builder;
+using Zoth.BehaviourTree.Builders;
 using Zoth.BehaviourTree.Nodes;
 
 namespace Zoth.BehaviourTree.Extentions
