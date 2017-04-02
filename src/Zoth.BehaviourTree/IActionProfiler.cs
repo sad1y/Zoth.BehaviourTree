@@ -2,7 +2,10 @@
 {
     public interface IActionProfiler<TTickData>
     {
-        void LogExecutingAction(int depth, string actionName, TTickData tick);
-        void LogExecutedAction(int depth, string actionName, TTickData tick, BehaviourTreeState nodeState);
+        void LogExecutingAction(string actionName, TTickData tick);
+        void LogExecutedAction(string actionName, TTickData tick, BehaviourTreeState nodeState);
+
+        void LevelUp();
+        void LevelDown();
     }
 }
