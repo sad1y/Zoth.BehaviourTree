@@ -8,13 +8,12 @@ using Zoth.BehaviourTree.Resources;
 namespace Zoth.BehaviourTree.Nodes
 {
     /// <summary>
-    /// a selector will return a success if any of its children succeed and not process any further children. 
-    /// It will process the first child, and if it fails will process the second, 
-    /// and if that fails will process the third, until a success is reached, at which point it will instantly return success.
+    /// A sequence will visit each child in order, starting with the first, 
+    /// and when that succeeds will call the second, and so on down the list of children. 
+    /// If any child fails it will immediately return failure to the parent. 
+    /// If the last child in the sequence succeeds, then the sequence will return success to its parent.
     /// </summary>
-    /// <typeparam name="TTickData"></typeparam>
-    /// <typeparam name="TState"></typeparam>
-    public class SelectNode<TTickData, TState> : IBehaviourTreeCompositeNode<TTickData, TState>
+    public class SequenceNode<TTickData, TState> : IBehaviourTreeCompositeNode<TTickData, TState>
     {
         private readonly IList<IBehaviourTreeNode<TTickData, TState>> _nodes = new List<IBehaviourTreeNode<TTickData, TState>>();
 
@@ -22,7 +21,7 @@ namespace Zoth.BehaviourTree.Nodes
         public bool Stateful { get; }
         public IActionProfiler<TTickData> Profiler { get; set; }
 
-        public SelectNode(string name, bool stateful)
+        public SequenceNode(string name, bool stateful)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name));
@@ -45,7 +44,7 @@ namespace Zoth.BehaviourTree.Nodes
                 throw new BehaviourTreeCompilationFailedException(ExceptionMessages.ChildShouldNotBeEmpty);
 
             var callChainCompiler = new CallChainCompiler<TTickData, TState>(
-                _nodes, (nodeState) => nodeState != BehaviourTreeState.Success);
+                _nodes, (nodeState) => nodeState == BehaviourTreeState.Success);
 
             return callChainCompiler.Compile(Stateful);
         }

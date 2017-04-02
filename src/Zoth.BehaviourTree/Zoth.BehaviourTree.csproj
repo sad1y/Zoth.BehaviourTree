@@ -51,6 +51,7 @@
     <Compile Include="Nodes\ActionNode.cs" />
     <Compile Include="Nodes\DecoratorNodeBase.cs" />
     <Compile Include="Nodes\SelectNode.cs" />
+    <Compile Include="Nodes\SequenceNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\ExceptionMessages.Designer.cs">
       <AutoGen>True</AutoGen>

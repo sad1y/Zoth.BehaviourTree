@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Zoth.BehaviourTree.Compilation
@@ -21,25 +22,17 @@ namespace Zoth.BehaviourTree.Compilation
 
         public Func<TTick, TState, BehaviourTreeState> Compile(bool stateful = false)
         {
-            // compile all of it
-            var compiledNodes = new List<Func<TTick, TState, BehaviourTreeState>>();
-
-            foreach (var node in _tree)
-            {
-                compiledNodes.Add(node.Compile());
-            }
-
-            compiledNodes.Reverse();
-
             // build a sequence of calls
-            foreach (var compiledNode in compiledNodes)
+            foreach (var node in _tree.Reverse())
             {
+                var compiledNode = node.Compile();
                 _root = WrapNextCall(compiledNode, _root, _nextActionCondition);
             }
 
             return (tick, state) =>
             {
-                var enteryPoint = _runningAction != null && stateful ? _runningAction : _root;
+                var enteryPoint = _runningAction != null && stateful ? 
+                    _runningAction : _root;
 
                 return enteryPoint(tick, state);
             };
@@ -54,8 +47,16 @@ namespace Zoth.BehaviourTree.Compilation
             {
                 var nodeState = action(tick, state);
 
-                if (nodeState == BehaviourTreeState.Running || !invokeNextCondition(nodeState))
+                if(nodeState == BehaviourTreeState.Running)
+                {
                     return nodeState;
+                }
+
+                if (!invokeNextCondition(nodeState))
+                {
+                    _runningAction = null;
+                    return nodeState;
+                }
 
                 _runningAction = nextFunc;
 
