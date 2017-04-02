@@ -46,7 +46,20 @@ namespace Zoth.BehaviourTree.Nodes
             var callChainCompiler = new CallChainCompiler<TTickData, TState>(
                 _nodes, (nodeState) => nodeState == BehaviourTreeState.Success);
 
-            return callChainCompiler.Compile(Stateful);
+            return (tick, state) =>
+            {
+
+                Profiler?.LevelDown();
+                Profiler?.LogExecutingAction(Name, tick);
+
+                var func = callChainCompiler.Compile(Stateful);
+                var nodeState = func(tick, state);
+
+                Profiler?.LogExecutedAction(Name, tick, nodeState);
+                Profiler?.LevelUp();
+
+                return nodeState;
+            };
         }
     }
 }

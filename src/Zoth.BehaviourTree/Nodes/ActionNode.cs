@@ -24,11 +24,11 @@ namespace Zoth.BehaviourTree.Nodes
         {
             return (tick, state) =>
             {
-                Profiler?.LogExecutingAction(0, Name, tick);
+                Profiler?.LogExecutingAction(Name, tick);
 
                 var nodeState = _action(tick, state);
 
-                Profiler?.LogExecutedAction(0, Name, tick, nodeState);
+                Profiler?.LogExecutedAction(Name, tick, nodeState);
 
                 return nodeState;
             };
