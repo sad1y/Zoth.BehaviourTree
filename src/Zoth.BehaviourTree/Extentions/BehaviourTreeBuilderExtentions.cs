@@ -25,5 +25,15 @@ namespace Zoth.BehaviourTree.Extentions
 
             return builder;
         }
+
+        public static IBehaviourTreeBuilder<TTickData, TState> Sequence<TTickData, TState>
+           (this IBehaviourTreeBuilder<TTickData, TState> builder, string name, bool stateful = false)
+        {
+            var newNode = new SequenceNode<TTickData, TState>(name, stateful);
+
+            builder.Add(newNode);
+
+            return builder;
+        }
     }
 }
