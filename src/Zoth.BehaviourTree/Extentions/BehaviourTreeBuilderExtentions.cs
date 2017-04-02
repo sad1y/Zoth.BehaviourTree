@@ -16,6 +16,17 @@ namespace Zoth.BehaviourTree.Extentions
             return builder;
         }
 
+        public static IBehaviourTreeBuilder<TTickData, TState> Condition<TTickData, TState>
+            (this IBehaviourTreeBuilder<TTickData, TState> builder, string name, Func<TTickData, TState, bool> predicate)
+        {
+            var newNode = new ActionNode<TTickData, TState>(name, 
+                (tick, state) => predicate(tick, state) ? BehaviourTreeState.Success : BehaviourTreeState.Failure);
+
+            builder.Add(newNode);
+
+            return builder;
+        }
+
         public static IBehaviourTreeBuilder<TTickData, TState> Select<TTickData, TState>
             (this IBehaviourTreeBuilder<TTickData, TState> builder, string name, bool stateful = false)
         {
