@@ -61,11 +61,29 @@ namespace Zoth.BehaviourTree.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Child nodes should not be empty.
+        ///   Looks up a localized string similar to child nodes should not be empty.
         /// </summary>
         internal static string ChildShouldNotBeEmpty {
             get {
                 return ResourceManager.GetString("ChildShouldNotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to decorated node is not provided.
+        /// </summary>
+        internal static string DecoratedNodeNotProvided {
+            get {
+                return ResourceManager.GetString("DecoratedNodeNotProvided", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to can&apos;t decorate more than one node.
+        /// </summary>
+        internal static string СantDecorateMoreThanOneNode {
+            get {
+                return ResourceManager.GetString("СantDecorateMoreThanOneNode", resourceCulture);
             }
         }
     }

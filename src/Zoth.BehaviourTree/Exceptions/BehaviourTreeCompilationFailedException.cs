@@ -2,7 +2,7 @@
 
 namespace Zoth.BehaviourTree.Exceptions
 {
-    public class BehaviourTreeCompilationFailedException : Exception
+    public class BehaviourTreeCompilationFailedException : BehaviourTreeException
     {
         public BehaviourTreeCompilationFailedException(string message) : base(message)
         {
