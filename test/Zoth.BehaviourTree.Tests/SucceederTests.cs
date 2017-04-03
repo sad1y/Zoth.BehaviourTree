@@ -1,18 +1,17 @@
 ﻿using Moq;
 using System.Collections.Generic;
 using Xunit;
-using Xunit.Extensions;
 using Zoth.BehaviourTree.Exceptions;
 using Zoth.BehaviourTree.Nodes;
 
 namespace Zoth.BehaviourTree.Tests
 {
-    public class InvertNodeTests
+    public class SucceederTests
     {
         [Fact]
         public void WithoutDecoratedNode()
         {
-            var invert = new InvertNode<int, int>();
+            var invert = new SucceederNode<int, int>();
 
             Assert.Throws<BehaviourTreeException>(() =>
             {
@@ -23,7 +22,7 @@ namespace Zoth.BehaviourTree.Tests
         [Fact]
         public void AddMoreThatOneNode()
         {
-            var invert = new InvertNode<int, int>();
+            var invert = new SucceederNode<int, int>();
 
             var mockNode = new Mock<IBehaviourTreeNode<int, int>>();
 
@@ -37,7 +36,7 @@ namespace Zoth.BehaviourTree.Tests
         [Theory, MemberData(nameof(ExecutionData))]
         public void ExecutionResult(IBehaviourTreeNode<int, int> node, BehaviourTreeState expectedState)
         {
-            var invert = new InvertNode<int, int>();
+            var invert = new SucceederNode<int, int>();
             invert.AddNode(node);
 
             var func = invert.Compile();
@@ -62,10 +61,10 @@ namespace Zoth.BehaviourTree.Tests
                 var error = new Mock<IBehaviourTreeNode<int, int>>();
                 error.Setup(f => f.Compile()).Returns((tick, state) => BehaviourTreeState.Error);
 
-                yield return new object[] { success.Object, BehaviourTreeState.Failure };
+                yield return new object[] { success.Object, BehaviourTreeState.Success };
                 yield return new object[] { fail.Object, BehaviourTreeState.Success };
-                yield return new object[] { running.Object, BehaviourTreeState.Running };
-                yield return new object[] { error.Object, BehaviourTreeState.Error };
+                yield return new object[] { running.Object, BehaviourTreeState.Success };
+                yield return new object[] { error.Object, BehaviourTreeState.Success };
             }
         }
     }
