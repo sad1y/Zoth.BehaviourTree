@@ -51,6 +51,7 @@
     <Compile Include="IBehaviourTreeNode.cs" />
     <Compile Include="Nodes\ActionNode.cs" />
     <Compile Include="Nodes\DecoratorNodeBase.cs" />
+    <Compile Include="Nodes\InvertNode.cs" />
     <Compile Include="Nodes\SelectNode.cs" />
     <Compile Include="Nodes\SequenceNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

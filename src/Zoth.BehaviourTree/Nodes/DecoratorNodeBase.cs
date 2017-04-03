@@ -10,7 +10,7 @@ namespace Zoth.BehaviourTree.Nodes
 
         public IActionProfiler<TTickData> Profiler { get; set; }
 
-        protected IBehaviourTreeNode<TTickData, TState> _wrappedNode;
+        protected IBehaviourTreeNode<TTickData, TState> DecoratedNode;
 
         public DecoratorNodeBase(string name)
         {
@@ -22,18 +22,20 @@ namespace Zoth.BehaviourTree.Nodes
 
         public void AddNode(IBehaviourTreeNode<TTickData, TState> node)
         {
-            if (_wrappedNode != null)
+            if (DecoratedNode != null)
                 throw new BehaviourTreeException(ExceptionMessages.СantDecorateMoreThanOneNode);
 
-            _wrappedNode = node ?? throw new ArgumentNullException(nameof(node));
+            DecoratedNode = node ?? throw new ArgumentNullException(nameof(node));
         }
+
+        protected abstract Func<TTickData, TState, BehaviourTreeState> CompileInternal();
 
         public Func<TTickData, TState, BehaviourTreeState> Compile()
         {
-            if (_wrappedNode == null)
+            if (DecoratedNode == null)
                 throw new BehaviourTreeException(ExceptionMessages.DecoratedNodeNotProvided);
 
-            var compiled = _wrappedNode.Compile();
+            var compiled = CompileInternal();
 
             return Profiler == null ? compiled :
                 (tick, state) =>
