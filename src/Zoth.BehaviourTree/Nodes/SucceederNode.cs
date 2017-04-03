@@ -11,7 +11,8 @@ namespace Zoth.BehaviourTree.Nodes
         {
             var decoratedCompiledNode = DecoratedNode.Compile();
 
-            return (tick, state) => {
+            return (tick, state) =>
+            {
                 decoratedCompiledNode(tick, state);
 
                 return BehaviourTreeState.Success;

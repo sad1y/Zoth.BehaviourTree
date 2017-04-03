@@ -1,4 +1,5 @@
 ﻿using System;
+using Zoth.BehaviourTree.Extentions;
 
 namespace Zoth.BehaviourTree.Nodes
 {
@@ -22,16 +23,7 @@ namespace Zoth.BehaviourTree.Nodes
 
         public Func<TTickData, TState, BehaviourTreeState> Compile()
         {
-            return (tick, state) =>
-            {
-                Profiler?.LogExecutingAction(Name, tick);
-
-                var nodeState = _action(tick, state);
-
-                Profiler?.LogExecutedAction(Name, tick, nodeState);
-
-                return nodeState;
-            };
+            return Profiler.Wrap(Name, _action);
         }
     }
 }

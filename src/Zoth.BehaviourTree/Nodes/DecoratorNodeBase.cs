@@ -1,5 +1,6 @@
 ﻿using System;
 using Zoth.BehaviourTree.Exceptions;
+using Zoth.BehaviourTree.Extentions;
 using Zoth.BehaviourTree.Resources;
 
 namespace Zoth.BehaviourTree.Nodes
@@ -35,19 +36,9 @@ namespace Zoth.BehaviourTree.Nodes
             if (DecoratedNode == null)
                 throw new BehaviourTreeException(ExceptionMessages.DecoratedNodeNotProvided);
 
-            var compiled = CompileInternal();
+            var func = CompileInternal();
 
-            return Profiler == null ? compiled :
-                (tick, state) =>
-                {
-                    Profiler?.LogExecutingAction(Name, tick);
-
-                    var nodeState = compiled(tick, state);
-
-                    Profiler?.LogExecutedAction(Name, tick, nodeState);
-
-                    return nodeState;
-                };
+            return Profiler.Wrap(Name, func);
         }
     }
 }

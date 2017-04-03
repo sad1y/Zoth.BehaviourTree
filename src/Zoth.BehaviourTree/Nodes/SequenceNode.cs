@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Zoth.BehaviourTree.Compilation;
 using Zoth.BehaviourTree.Exceptions;
+using Zoth.BehaviourTree.Extentions;
 using Zoth.BehaviourTree.Resources;
 
 namespace Zoth.BehaviourTree.Nodes
@@ -46,20 +47,9 @@ namespace Zoth.BehaviourTree.Nodes
             var callChainCompiler = new CallChainCompiler<TTickData, TState>(
                 _nodes, (nodeState) => nodeState == BehaviourTreeState.Success);
 
-            return (tick, state) =>
-            {
+            var func = callChainCompiler.Compile(Stateful);
 
-                Profiler?.LevelDown();
-                Profiler?.LogExecutingAction(Name, tick);
-
-                var func = callChainCompiler.Compile(Stateful);
-                var nodeState = func(tick, state);
-
-                Profiler?.LogExecutedAction(Name, tick, nodeState);
-                Profiler?.LevelUp();
-
-                return nodeState;
-            };
+            return Profiler.Wrap(Name, func, true);
         }
     }
 }

@@ -46,6 +46,7 @@
     <Compile Include="Exceptions\BehaviourTreeBuilderFailedException.cs" />
     <Compile Include="Exceptions\BehaviourTreeException.cs" />
     <Compile Include="Extentions\BehaviourTreeBuilderExtentions.cs" />
+    <Compile Include="Extentions\ProfilerExtentions.cs" />
     <Compile Include="IActionProfiler.cs" />
     <Compile Include="IBehaviourTreeCompositeNode.cs" />
     <Compile Include="IBehaviourTreeNode.cs" />
