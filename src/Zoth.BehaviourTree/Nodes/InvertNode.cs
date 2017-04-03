@@ -4,7 +4,7 @@ namespace Zoth.BehaviourTree.Nodes
 {
     public class InvertNode<TTick, TState> : DecoratorNodeBase<TTick, TState>
     {
-        public InvertNode(string name) : base("Invert")
+        public InvertNode() : base("Invert")
         {
         }
 
