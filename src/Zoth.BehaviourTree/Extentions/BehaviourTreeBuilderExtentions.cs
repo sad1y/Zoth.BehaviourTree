@@ -46,5 +46,25 @@ namespace Zoth.BehaviourTree.Extentions
 
             return builder;
         }
+
+        public static IBehaviourTreeBuilder<TTickData, TState> Succeeder<TTickData, TState>
+           (this IBehaviourTreeBuilder<TTickData, TState> builder)
+        {
+            var newNode = new SucceederNode<TTickData, TState>();
+
+            builder.Add(newNode);
+
+            return builder;
+        }
+
+        public static IBehaviourTreeBuilder<TTickData, TState> Inverter<TTickData, TState>
+           (this IBehaviourTreeBuilder<TTickData, TState> builder)
+        {
+            var newNode = new InverterNode<TTickData, TState>();
+
+            builder.Add(newNode);
+
+            return builder;
+        }
     }
 }
