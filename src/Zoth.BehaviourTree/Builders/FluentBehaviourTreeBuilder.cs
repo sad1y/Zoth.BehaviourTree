@@ -3,34 +3,31 @@ using Zoth.BehaviourTree.Exceptions;
 
 namespace Zoth.BehaviourTree.Builders
 {
-    public class FluentBehaviourTreeBuilder<TTickData, TState> : IBehaviourTreeBuilder<TTickData, TState>
+    public class FluentBehaviourTreeBuilder<TTickData, TState>
     {
-        private IBehaviourTreeCompositeNode<TTickData, TState> _root;
+        private BehaviourTreeNodeSequenceBuilder<TTickData, TState> _root;
 
-        public IBehaviourTreeBuilder<TTickData, TState> Add(IBehaviourTreeNode<TTickData, TState> node)
-        {
-            throw new BehaviourTreeBuilderFailedException("only types that derived from IBehaviourTreeComposition<TTickData, TState> can used as root");
-        }
+        //public IBehaviourTreeBuilder<TTickData, TState> Add(IBehaviourTreeNode<TTickData, TState> node)
+        //{
+        //    throw new BehaviourTreeBuilderException("only types that derived from IBehaviourTreeComposition<TTickData, TState> can used as root");
+        //}
 
-        public IBehaviourTreeBuilder<TTickData, TState> Add(IBehaviourTreeCompositeNode<TTickData, TState> node)
+        public void Root(
+            BehaviourTreeNodeSequenceBuilder<TTickData, TState> node,
+            Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config)
         {
             if (_root != null)
-                throw new BehaviourTreeBuilderFailedException("root already specified");
+                throw new BehaviourTreeBuilderException("root already specified");
 
             _root = node ?? throw new ArgumentNullException(nameof(node));
 
-            return new BehaviourTreeCompositeNodeBuilder<TTickData, TState>(_root);
-        }
-
-        public IBehaviourTreeBuilder<TTickData, TState> End()
-        {
-            return this;
+            config( new BehaviourTreeNodeSequenceBuilder<TTickData, TState>(_root) );
         }
 
         public Func<TTickData, TState, BehaviourTreeState> Build()
         {
             if (_root == null)
-                throw new BehaviourTreeBuilderFailedException("cant build whitout root");
+                throw new BehaviourTreeBuilderException("cant build whitout root");
 
             return _root.Compile();
         }

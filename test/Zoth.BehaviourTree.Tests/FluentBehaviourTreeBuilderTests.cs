@@ -15,7 +15,7 @@ namespace Zoth.BehaviourTree.Tests
 
             var moqAction = new Mock<IBehaviourTreeNode<int, int>>();
 
-            Assert.Throws<BehaviourTreeBuilderFailedException>(() => builder.Add(moqAction.Object));
+            Assert.Throws<BehaviourTreeBuilderException>(() => builder.Add(moqAction.Object));
         }
 
         [Fact]
@@ -23,9 +23,9 @@ namespace Zoth.BehaviourTree.Tests
         {
             var builder = new FluentBehaviourTreeBuilder<int, int>();
 
-            var moqAction = new Mock<IBehaviourTreeCompositeNode<int, int>>();
+            var moqAction = new Mock<IBehaviourTreeNodeSequence<int, int>>();
 
-            Assert.Throws<BehaviourTreeBuilderFailedException>(() =>
+            Assert.Throws<BehaviourTreeBuilderException>(() =>
             {
                 builder.Add(moqAction.Object);
                 builder.Add(moqAction.Object);
@@ -50,7 +50,7 @@ namespace Zoth.BehaviourTree.Tests
         {
             var builder = new FluentBehaviourTreeBuilder<int, int>();
 
-            Assert.Throws<BehaviourTreeBuilderFailedException>(() => {
+            Assert.Throws<BehaviourTreeBuilderException>(() => {
                 builder.Build();
             });
         }
@@ -60,7 +60,7 @@ namespace Zoth.BehaviourTree.Tests
         {
             var builder = new FluentBehaviourTreeBuilder<int, int>();
 
-            var moqAction = new Mock<IBehaviourTreeCompositeNode<int, int>>();
+            var moqAction = new Mock<IBehaviourTreeNodeSequence<int, int>>();
 
             moqAction.Setup(f => f.Compile()).Returns((time, state) => BehaviourTreeState.Running);
 
@@ -76,10 +76,17 @@ namespace Zoth.BehaviourTree.Tests
         public void SetupNestedTree()
         {
             var builder = new FluentBehaviourTreeBuilder<int, int>();
-            var moqAction = new Mock<IBehaviourTreeCompositeNode<int, int>>();
+            var moqAction = new Mock<IBehaviourTreeNodeSequence<int, int>>();
             var moqProfile = new Mock<IActionProfiler<int>>();
 
             moqAction.Setup(f => f.Compile()).Returns((time, state) => BehaviourTreeState.Running);
+
+            builder
+                .Root(moqAction.Object, b => {
+                    b.Select("", selectB => {
+                        selectB.Sequence("", )
+                    })
+                });
 
             var subtreeBuilder = builder
                 .Add(moqAction.Object)

@@ -15,7 +15,7 @@ namespace Zoth.BehaviourTree.Nodes
     /// </summary>
     /// <typeparam name="TTickData"></typeparam>
     /// <typeparam name="TState"></typeparam>
-    public class SelectNode<TTickData, TState> : IBehaviourTreeCompositeNode<TTickData, TState>
+    public class SelectNode<TTickData, TState> : IBehaviourTreeNodeSequence<TTickData, TState>
     {
         private readonly IList<IBehaviourTreeNode<TTickData, TState>> _nodes = new List<IBehaviourTreeNode<TTickData, TState>>();
 
@@ -43,9 +43,9 @@ namespace Zoth.BehaviourTree.Nodes
         public Func<TTickData, TState, BehaviourTreeState> Compile()
         {
             if (!_nodes.Any())
-                throw new BehaviourTreeCompilationFailedException(ExceptionMessages.ChildShouldNotBeEmpty);
+                throw new BehaviourTreeCompilationException(ExceptionMessages.ChildShouldNotBeEmpty);
 
-            var callChainCompiler = new CallChainCompiler<TTickData, TState>(
+            var callChainCompiler = new SequentialCallCompiler<TTickData, TState>(
                 _nodes, (nodeState) => nodeState != BehaviourTreeState.Success);
 
             var func = callChainCompiler.Compile(Stateful);

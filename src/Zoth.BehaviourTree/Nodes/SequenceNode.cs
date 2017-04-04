@@ -14,7 +14,7 @@ namespace Zoth.BehaviourTree.Nodes
     /// If any child fails it will immediately return failure to the parent. 
     /// If the last child in the sequence succeeds, then the sequence will return success to its parent.
     /// </summary>
-    public class SequenceNode<TTickData, TState> : IBehaviourTreeCompositeNode<TTickData, TState>
+    public class SequenceNode<TTickData, TState> : IBehaviourTreeNodeSequence<TTickData, TState>
     {
         private readonly IList<IBehaviourTreeNode<TTickData, TState>> _nodes = new List<IBehaviourTreeNode<TTickData, TState>>();
 
@@ -42,9 +42,9 @@ namespace Zoth.BehaviourTree.Nodes
         public Func<TTickData, TState, BehaviourTreeState> Compile()
         {
             if (!_nodes.Any())
-                throw new BehaviourTreeCompilationFailedException(ExceptionMessages.ChildShouldNotBeEmpty);
+                throw new BehaviourTreeCompilationException(ExceptionMessages.ChildShouldNotBeEmpty);
 
-            var callChainCompiler = new CallChainCompiler<TTickData, TState>(
+            var callChainCompiler = new SequentialCallCompiler<TTickData, TState>(
                 _nodes, (nodeState) => nodeState == BehaviourTreeState.Success);
 
             var func = callChainCompiler.Compile(Stateful);

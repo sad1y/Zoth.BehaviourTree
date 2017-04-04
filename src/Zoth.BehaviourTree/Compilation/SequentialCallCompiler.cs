@@ -4,20 +4,20 @@ using System.Collections.Generic;
 
 namespace Zoth.BehaviourTree.Compilation
 {
-    internal class CallChainCompiler<TTick, TState>
+    internal class SequentialCallCompiler<TTick, TState>
     {
         private Func<TTick, TState, BehaviourTreeState> _root = null;
         private Func<TTick, TState, BehaviourTreeState> _runningAction = null;
-        private Func<BehaviourTreeState, bool> _nextActionCondition = null;
+        private Func<BehaviourTreeState, bool> _terminationCondition = null;
 
         private IEnumerable<IBehaviourTreeNode<TTick, TState>> _tree;
 
-        public CallChainCompiler(
+        public SequentialCallCompiler(
             IEnumerable<IBehaviourTreeNode<TTick, TState>> tree, 
-            Func<BehaviourTreeState, bool> nextActionCondition)
+            Func<BehaviourTreeState, bool> terminationCondition)
         {
             _tree = tree;
-            _nextActionCondition = nextActionCondition;
+            _terminationCondition = terminationCondition;
         }
 
         public Func<TTick, TState, BehaviourTreeState> Compile(bool stateful = false)
@@ -26,7 +26,7 @@ namespace Zoth.BehaviourTree.Compilation
             foreach (var node in _tree.Reverse())
             {
                 var compiledNode = node.Compile();
-                _root = WrapNextCall(compiledNode, _root, _nextActionCondition);
+                _root = WrapNextCall(compiledNode, _root, _terminationCondition);
             }
 
             return (tick, state) =>
@@ -41,7 +41,7 @@ namespace Zoth.BehaviourTree.Compilation
         private Func<TTick, TState, BehaviourTreeState> WrapNextCall(
             Func<TTick, TState, BehaviourTreeState> action,
             Func<TTick, TState, BehaviourTreeState> nextFunc,
-            Func<BehaviourTreeState, bool> invokeNextCondition)
+            Func<BehaviourTreeState, bool> terminationCondition)
         {
             return (tick, state) =>
             {
@@ -52,7 +52,7 @@ namespace Zoth.BehaviourTree.Compilation
                     return nodeState;
                 }
 
-                if (!invokeNextCondition(nodeState))
+                if (!terminationCondition(nodeState))
                 {
                     _runningAction = null;
                     return nodeState;

@@ -4,8 +4,9 @@
     {
         IBehaviourTreeBuilder<TTickData, TState> Add(IBehaviourTreeNode<TTickData, TState> node);
 
-        IBehaviourTreeBuilder<TTickData, TState> Add(IBehaviourTreeCompositeNode<TTickData, TState> node);
+        IBehaviourTreeBuilder<TTickData, TState> Add(IBehaviourTreeNodeSequence<TTickData, TState> node);
+        // RandomSequenceBehaviourTreeBuilder<TTickData, TState, TParentBuilder> AddRandom(IBehaviourTreeCompositeNode<TTickData, TState> node);
 
-        IBehaviourTreeBuilder<TTickData, TState> End();
+        // IBehaviourTreeBuilder<TTickData, TState> End();
     }
 }

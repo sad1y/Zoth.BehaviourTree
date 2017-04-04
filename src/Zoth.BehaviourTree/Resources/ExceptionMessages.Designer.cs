@@ -79,6 +79,15 @@ namespace Zoth.BehaviourTree.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to probability must be greater than zero.
+        /// </summary>
+        internal static string RandomEntryProbabilityEqualZero {
+            get {
+                return ResourceManager.GetString("RandomEntryProbabilityEqualZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to can&apos;t decorate more than one node.
         /// </summary>
         internal static string СantDecorateMoreThanOneNode {

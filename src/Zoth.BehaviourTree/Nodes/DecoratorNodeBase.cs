@@ -5,7 +5,7 @@ using Zoth.BehaviourTree.Resources;
 
 namespace Zoth.BehaviourTree.Nodes
 {
-    public abstract class DecoratorNodeBase<TTickData, TState> : IBehaviourTreeCompositeNode<TTickData, TState>
+    public abstract class DecoratorNodeBase<TTickData, TState> : IBehaviourTreeNodeSequence<TTickData, TState>
     {
         public string Name { get; }
 
