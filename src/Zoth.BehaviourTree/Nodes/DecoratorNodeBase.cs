@@ -5,7 +5,7 @@ using Zoth.BehaviourTree.Resources;
 
 namespace Zoth.BehaviourTree.Nodes
 {
-    public abstract class DecoratorNodeBase<TTickData, TState> : IBehaviourTreeNodeSequence<TTickData, TState>
+    public abstract class DecoratorNodeBase<TTickData, TState> : IBehaviourTreeNodeDecorator<TTickData, TState>
     {
         public string Name { get; }
 
@@ -21,14 +21,6 @@ namespace Zoth.BehaviourTree.Nodes
             Name = name;
         }
 
-        public void AddNode(IBehaviourTreeNode<TTickData, TState> node)
-        {
-            if (DecoratedNode != null)
-                throw new BehaviourTreeException(ExceptionMessages.СantDecorateMoreThanOneNode);
-
-            DecoratedNode = node ?? throw new ArgumentNullException(nameof(node));
-        }
-
         protected abstract Func<TTickData, TState, BehaviourTreeState> CompileInternal();
 
         public Func<TTickData, TState, BehaviourTreeState> Compile()
@@ -39,6 +31,14 @@ namespace Zoth.BehaviourTree.Nodes
             var func = CompileInternal();
 
             return Profiler.Wrap(Name, func);
+        }
+
+        public void Decorate(IBehaviourTreeNode<TTickData, TState> node)
+        {
+            if (DecoratedNode != null)
+                throw new BehaviourTreeException(ExceptionMessages.СantDecorateMoreThanOneNode);
+
+            DecoratedNode = node ?? throw new ArgumentNullException(nameof(node));
         }
     }
 }

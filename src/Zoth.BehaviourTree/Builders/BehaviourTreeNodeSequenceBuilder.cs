@@ -41,10 +41,9 @@ namespace Zoth.BehaviourTree.Builders
             return this;
         }
 
-
         public BehaviourTreeNodeSequenceBuilder<TTickData, TState> Add(
-            IBehaviourTreeNodeRandomSequence<TTickData, TState> node,
-            Action<BehaviourTreeNodeRandomSequenceBuilder<TTickData, TState>> config)
+            IBehaviourTreeNodeRandom<TTickData, TState> node,
+            Action<BehaviourTreeNodeRandomBuilder<TTickData, TState>> config)
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
@@ -54,7 +53,24 @@ namespace Zoth.BehaviourTree.Builders
 
             _parentNode.AddNode(node);
 
-            config(new BehaviourTreeNodeRandomSequenceBuilder<TTickData, TState>(node));
+            config(new BehaviourTreeNodeRandomBuilder<TTickData, TState>(node));
+
+            return this;
+        }
+
+        public BehaviourTreeNodeSequenceBuilder<TTickData, TState> Add(
+            IBehaviourTreeNodeDecorator<TTickData, TState> node,
+            Action<BehaviourTreeNodeDecoratorBuilder<TTickData, TState>> config)
+        {
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
+
+            if (config == null)
+                throw new ArgumentNullException(nameof(config));
+
+            _parentNode.AddNode(node);
+
+            config(new BehaviourTreeNodeDecoratorBuilder<TTickData, TState>(node));
 
             return this;
         }

@@ -26,10 +26,10 @@ namespace Zoth.BehaviourTree.Builders
             SetRootInternal(root);
         }
 
-        public void Root(IBehaviourTreeNodeRandomSequence<TTickData, TState> root,
-            Action<BehaviourTreeNodeRandomSequenceBuilder<TTickData, TState>> config)
+        public void Root(IBehaviourTreeNodeRandom<TTickData, TState> root,
+            Action<BehaviourTreeNodeRandomBuilder<TTickData, TState>> config)
         {
-            var rootBuilder = new BehaviourTreeNodeRandomSequenceBuilder<TTickData, TState>(root);
+            var rootBuilder = new BehaviourTreeNodeRandomBuilder<TTickData, TState>(root);
 
             config(rootBuilder);
 

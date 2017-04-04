@@ -8,7 +8,7 @@ using Zoth.BehaviourTree.Resources;
 
 namespace Zoth.BehaviourTree.Nodes
 {
-    public class RandomSequenceNode<TTickData, TState> : IBehaviourTreeNodeRandomSequence<TTickData, TState>
+    public class RandomSequenceNode<TTickData, TState> : IBehaviourTreeNodeRandom<TTickData, TState>
     {
         private readonly IList<RandomEntry<IBehaviourTreeNode<TTickData, TState>>> _nodes
             = new List<RandomEntry<IBehaviourTreeNode<TTickData, TState>>>();

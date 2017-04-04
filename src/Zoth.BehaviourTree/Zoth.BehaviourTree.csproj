@@ -38,7 +38,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BehaviourTreeState.cs" />
-    <Compile Include="Builders\BehaviourTreeNodeRandomSequenceBuilder.cs" />
+    <Compile Include="Builders\BehaviourTreeNodeDecoratorBuilder.cs" />
+    <Compile Include="Builders\BehaviourTreeNodeRandomBuilder.cs" />
     <Compile Include="Builders\BehaviourTreeNodeSequenceBuilder.cs" />
     <Compile Include="Builders\IBehaviourTreeBuilder.cs" />
     <Compile Include="Builders\FluentBehaviourTreeBuilder.cs" />
@@ -47,12 +48,14 @@
     <Compile Include="Exceptions\BehaviourTreeBuilderException.cs" />
     <Compile Include="Exceptions\BehaviourTreeCompilationException.cs" />
     <Compile Include="Exceptions\BehaviourTreeException.cs" />
-    <Compile Include="Extentions\BehaviourTreeNodeBuilderExtentions.cs" />
+    <Compile Include="Extentions\BehaviourTreeNodeDecoratorBuilderExtentions.cs" />
+    <Compile Include="Extentions\BehaviourTreeNodeRandomBuilderExtentions.cs" />
+    <Compile Include="Extentions\BehaviourTreeNodeSequenceBuilderExtentions.cs" />
     <Compile Include="Extentions\ProfilerExtentions.cs" />
     <Compile Include="IActionProfiler.cs" />
     <Compile Include="IBehaviourTreeNodeDecorator.cs" />
-    <Compile Include="IBehaviourTreeNodeRandomSequence.cs" />
     <Compile Include="IBehaviourTreeNode.cs" />
+    <Compile Include="IBehaviourTreeNodeRandom.cs" />
     <Compile Include="IBehaviourTreeNodeSequence.cs" />
     <Compile Include="Nodes\ActionNode.cs" />
     <Compile Include="Nodes\DecoratorNodeBase.cs" />
