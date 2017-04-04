@@ -31,10 +31,10 @@ namespace Zoth.BehaviourTree.Compilation
 
             return (tick, state) =>
             {
-                var enteryPoint = _runningAction != null && stateful ? 
+                var entryPoint = _runningAction != null && stateful ? 
                     _runningAction : _root;
 
-                return enteryPoint(tick, state);
+                return entryPoint(tick, state);
             };
         }
 
@@ -52,7 +52,8 @@ namespace Zoth.BehaviourTree.Compilation
                     return nodeState;
                 }
 
-                if (!terminationCondition(nodeState))
+                if (nodeState == BehaviourTreeState.Error ||
+                    terminationCondition(nodeState))
                 {
                     _runningAction = null;
                     return nodeState;

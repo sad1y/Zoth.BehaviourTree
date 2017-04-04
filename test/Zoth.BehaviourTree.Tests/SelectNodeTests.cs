@@ -1,6 +1,8 @@
 ﻿using Moq;
 using System;
+using System.Collections.Generic;
 using Xunit;
+using Zoth.BehaviourTree.Exceptions;
 using Zoth.BehaviourTree.Nodes;
 
 namespace Zoth.BehaviourTree.Tests
@@ -82,6 +84,88 @@ namespace Zoth.BehaviourTree.Tests
             Assert.Equal(2, func1CallCount);
             Assert.Equal(2, func2CallCount);
             Assert.Equal(0, func3CallCount);
+        }
+
+        [Fact]
+        public void CompileWithoutSetup()
+        {
+            var selectNode = new SelectNode<int, int>("test", false);
+
+            Assert.Throws<BehaviourTreeCompilationException>(() => {
+                selectNode.Compile();
+            });
+        }
+
+        [Theory, MemberData(nameof(Data))]
+        public void VerifyStatelessExecution(IEnumerable<IBehaviourTreeNode<int, int>> nodes, BehaviourTreeState expectedState) {
+
+            var selectNode = new SelectNode<int, int>("test", false);
+
+            foreach (var node in nodes)
+            {
+                selectNode.AddNode(node);
+            }
+
+            var func = selectNode.Compile();
+
+            var state = func(0, 0);
+
+            Assert.Equal(expectedState, state);
+        }
+
+        [Theory, MemberData(nameof(Data))]
+        public void VerifyExecution(IEnumerable<IBehaviourTreeNode<int, int>> nodes, BehaviourTreeState expectedState)
+        {
+            var selectNode = new SelectNode<int, int>("test", true);
+
+            foreach (var node in nodes)
+            {
+                selectNode.AddNode(node);
+            }
+
+            var func = selectNode.Compile();
+
+            var state = func(0, 0);
+
+            Assert.Equal(expectedState, state);
+        }
+
+        public static IEnumerable<object[]> Data
+        {
+            get
+            {
+                var success = new Mock<IBehaviourTreeNode<int, int>>();
+                success.Setup(f => f.Compile()).Returns((tick, state) => BehaviourTreeState.Success);
+
+                var fail = new Mock<IBehaviourTreeNode<int, int>>();
+                fail.Setup(f => f.Compile()).Returns((tick, state) => BehaviourTreeState.Failure);
+
+                var running = new Mock<IBehaviourTreeNode<int, int>>();
+                running.Setup(f => f.Compile()).Returns((tick, state) => BehaviourTreeState.Running);
+
+                var error = new Mock<IBehaviourTreeNode<int, int>>();
+                error.Setup(f => f.Compile()).Returns((tick, state) => BehaviourTreeState.Error);
+
+                yield return new object[] {
+                    new [] { error.Object, running.Object, success.Object, fail.Object },
+                    BehaviourTreeState.Error
+                };
+
+                yield return new object[] {
+                    new [] { fail.Object, success.Object, success.Object },
+                    BehaviourTreeState.Success
+                };
+
+                yield return new object[] {
+                    new [] { fail.Object, fail.Object , fail.Object },
+                    BehaviourTreeState.Failure
+                };
+
+                yield return new object[] {
+                    new [] { fail.Object, running.Object, success.Object, fail.Object },
+                    BehaviourTreeState.Running
+                };
+            }
         }
     }
 }

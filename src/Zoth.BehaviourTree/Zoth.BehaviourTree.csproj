@@ -57,6 +57,7 @@
     <Compile Include="Nodes\ActionNode.cs" />
     <Compile Include="Nodes\DecoratorNodeBase.cs" />
     <Compile Include="Nodes\InverterNode.cs" />
+    <Compile Include="Nodes\RandomSelectNode.cs" />
     <Compile Include="Nodes\RandomSequenceNode.cs" />
     <Compile Include="Nodes\SelectNode.cs" />
     <Compile Include="Nodes\SequenceNode.cs" />

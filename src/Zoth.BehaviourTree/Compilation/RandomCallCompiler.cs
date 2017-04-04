@@ -18,38 +18,46 @@ namespace Zoth.BehaviourTree.Compilation
             _terminationСondition = terminationСondition;
         }
 
-        public Func<TTick, TState, BehaviourTreeState> Compile(bool stateful = false)
+        public Func<TTick, TState, BehaviourTreeState> Compile()
         {
-            var rnd = new Random();
+            var map = _entries.Select(f => new { Probability = (int)f.Probability, Action = f.Entry.Compile() });
 
-            var maxValue = 0;
-
-            var iterator = _entries.GetEnumerator();
-
-            var map = new Dictionary<int, Func<TTick, TState, BehaviourTreeState>>();
-
-            while (iterator.MoveNext())
-            {
-                var chance = (int)iterator.Current.Probability;
-                var action = iterator.Current.Entry.Compile();
-
-                maxValue += chance > 0 ? chance : 1;
-                map[maxValue] = action;
-            }
+            var shuffledByProbability = map
+                .OrderByDescending(f => GetRandom(f.Probability))
+                .Select(f => f.Action);
 
             return (tick, state) =>
             {
-                var roll = rnd.Next(0, maxValue);
+                var previousCallState = BehaviourTreeState.Error;
 
-                for (int i = 0; i < map.Count; i++)
+                foreach (var node in shuffledByProbability)
                 {
-                    var entry = map.ElementAt(i);
-                    if (entry.Key <= roll)
-                        return entry.Value(tick, state);
+                    var nodeState = node(tick, state);
+
+                    if (
+                        nodeState == BehaviourTreeState.Running ||
+                        nodeState == BehaviourTreeState.Error ||
+                        _terminationСondition(nodeState))
+                    {
+                        return nodeState;
+                    }
+
+                    previousCallState = nodeState;
                 }
 
-                return BehaviourTreeState.Error;
+                return previousCallState;
             };
+        }
+
+        private static Random Rng = new Random();
+        private static object syncObject = new object();
+
+        private static int GetRandom(int max)
+        {
+            lock (syncObject)
+            {
+                return Rng.Next(max);
+            }
         }
     }
 }

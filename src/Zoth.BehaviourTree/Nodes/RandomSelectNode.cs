@@ -8,7 +8,7 @@ using Zoth.BehaviourTree.Resources;
 
 namespace Zoth.BehaviourTree.Nodes
 {
-    public class RandomSequenceNode<TTickData, TState> : IBehaviourTreeNodeRandomSequence<TTickData, TState>
+    public class RandomSelectNode<TTickData, TState> : IBehaviourTreeNodeRandomSequence<TTickData, TState>
     {
         private readonly IList<RandomEntry<IBehaviourTreeNode<TTickData, TState>>> _nodes
             = new List<RandomEntry<IBehaviourTreeNode<TTickData, TState>>>();
@@ -16,7 +16,7 @@ namespace Zoth.BehaviourTree.Nodes
         public string Name { get; }
         public IActionProfiler<TTickData> Profiler { get; set; }
 
-        public RandomSequenceNode(string name)
+        public RandomSelectNode(string name)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name));
@@ -37,8 +37,8 @@ namespace Zoth.BehaviourTree.Nodes
             if (!_nodes.Any())
                 throw new BehaviourTreeCompilationException(ExceptionMessages.ChildShouldNotBeEmpty);
 
-            var compiler = new RandomCallCompiler<TTickData, TState>(_nodes.AsEnumerable(), 
-                (nodeState) => nodeState != BehaviourTreeState.Success);
+            var compiler = new RandomCallCompiler<TTickData, TState>(_nodes.AsEnumerable(),
+                (nodeState) => nodeState == BehaviourTreeState.Success);
 
             var func = compiler.Compile();
 

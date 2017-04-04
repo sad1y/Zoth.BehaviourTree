@@ -46,26 +46,11 @@ namespace Zoth.BehaviourTree.Nodes
                 throw new BehaviourTreeCompilationException(ExceptionMessages.ChildShouldNotBeEmpty);
 
             var callChainCompiler = new SequentialCallCompiler<TTickData, TState>(
-                _nodes, (nodeState) => nodeState != BehaviourTreeState.Success);
+                _nodes, (nodeState) => nodeState == BehaviourTreeState.Success);
 
             var func = callChainCompiler.Compile(Stateful);
 
             return Profiler.Wrap(Name, func, true);
-
-            //return (tick, state) =>
-            //{
-
-            //    Profiler?.LevelDown();
-            //    Profiler?.LogExecutingAction(Name, tick);
-
-            //    var func = callChainCompiler.Compile(Stateful);
-            //    var nodeState = func(tick, state);
-
-            //    Profiler?.LogExecutedAction(Name, tick, nodeState);
-            //    Profiler?.LevelUp();
-
-            //    return nodeState;
-            //};
         }
     }
 }

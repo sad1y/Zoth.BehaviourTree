@@ -45,7 +45,7 @@ namespace Zoth.BehaviourTree.Nodes
                 throw new BehaviourTreeCompilationException(ExceptionMessages.ChildShouldNotBeEmpty);
 
             var callChainCompiler = new SequentialCallCompiler<TTickData, TState>(
-                _nodes, (nodeState) => nodeState == BehaviourTreeState.Success);
+                _nodes, (nodeState) => nodeState != BehaviourTreeState.Success);
 
             var func = callChainCompiler.Compile(Stateful);
 
