@@ -9,7 +9,7 @@ namespace Zoth.BehaviourTree.Nodes
 
         public string Name { get; }
 
-        public IActionProfiler<TTickData> Profiler { get; set; }
+        public ITickProfiler<TTickData> Profiler { get; set; }
 
         public ActionNode(string name, Func<TTickData, TState, BehaviourTreeState> action)
         {

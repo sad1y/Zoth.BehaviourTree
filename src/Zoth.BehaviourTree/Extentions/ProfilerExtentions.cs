@@ -5,7 +5,7 @@ namespace Zoth.BehaviourTree.Extentions
     public static class ProfilerExtentions
     {
         public static Func<TTick, TState, BehaviourTreeState> Wrap<TTick, TState>
-            (this IActionProfiler<TTick> profiler, string funcName, Func<TTick, TState, BehaviourTreeState> func, bool container = false)
+            (this ITickProfiler<TTick> profiler, string funcName, Func<TTick, TState, BehaviourTreeState> func, bool container = false)
         {
             if (profiler == null) return func;
 

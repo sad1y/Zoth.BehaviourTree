@@ -7,6 +7,7 @@ namespace Zoth.BehaviourTree.Builders
     public class FluentBehaviourTreeBuilder<TTickData, TState>
     {
         private IBehaviourTreeNode<TTickData, TState> _root;
+        private ITickProfiler<TTickData> _profiler;
 
         private void SetRootInternal(IBehaviourTreeNode<TTickData, TState> root)
         {
@@ -14,6 +15,13 @@ namespace Zoth.BehaviourTree.Builders
                 throw new BehaviourTreeBuilderException("root already specified");
 
             _root = root;
+        }
+
+        public FluentBehaviourTreeBuilder<TTickData, TState> Profiler(ITickProfiler<TTickData> profiler)
+        {
+            _profiler = profiler;
+
+            return this;
         }
 
         public void Root(IBehaviourTreeNodeSequence<TTickData, TState> root, 
@@ -35,16 +43,6 @@ namespace Zoth.BehaviourTree.Builders
 
             SetRootInternal(root);
         }
-
-        //public void Root(IBehaviourTreeNodeDecorator<TTickData, TState> root,
-        //    Action<BehaviourTreeNodeDecoratorBuilder<TTickData, TState>> config)
-        //{
-        //    var rootBuilder = new BehaviourTreeNodeDecoratorBuilder<TTickData, TState>(root);
-
-        //    config(rootBuilder);
-
-        //    SetRootInternal(root);
-        //}
 
         const string RootName = "root";
 
@@ -80,6 +78,9 @@ namespace Zoth.BehaviourTree.Builders
         {
             if (_root == null)
                 throw new BehaviourTreeBuilderException("cant build whitout root");
+
+            if (_profiler != null)
+                _root.Profiler = _profiler;
 
             return _root.Compile();
         }

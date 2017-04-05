@@ -19,9 +19,27 @@ namespace Zoth.BehaviourTree.Nodes
     {
         private readonly IList<IBehaviourTreeNode<TTickData, TState>> _nodes = new List<IBehaviourTreeNode<TTickData, TState>>();
 
+        private ITickProfiler<TTickData> _profiler;
+
+        public ITickProfiler<TTickData> Profiler
+        {
+            get
+            {
+                return _profiler;
+            }
+            set
+            {
+                _profiler = value;
+
+                foreach (var node in _nodes)
+                    node.Profiler = _profiler;
+
+            }
+        }
+
         public string Name { get; }
+
         public bool Stateful { get; }
-        public IActionProfiler<TTickData> Profiler { get; set; }
 
         public SelectNode(string name, bool stateful)
         {

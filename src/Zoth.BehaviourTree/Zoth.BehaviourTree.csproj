@@ -41,7 +41,6 @@
     <Compile Include="Builders\BehaviourTreeNodeDecoratorBuilder.cs" />
     <Compile Include="Builders\BehaviourTreeNodeRandomBuilder.cs" />
     <Compile Include="Builders\BehaviourTreeNodeSequenceBuilder.cs" />
-    <Compile Include="Builders\IBehaviourTreeBuilder.cs" />
     <Compile Include="Builders\FluentBehaviourTreeBuilder.cs" />
     <Compile Include="Compilation\RandomCallCompiler.cs" />
     <Compile Include="Compilation\SequentialCallCompiler.cs" />

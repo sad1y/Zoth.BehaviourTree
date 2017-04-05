@@ -13,8 +13,25 @@ namespace Zoth.BehaviourTree.Nodes
         private readonly IList<RandomEntry<IBehaviourTreeNode<TTickData, TState>>> _nodes
             = new List<RandomEntry<IBehaviourTreeNode<TTickData, TState>>>();
 
+        private ITickProfiler<TTickData> _profiler;
+
+        public ITickProfiler<TTickData> Profiler
+        {
+            get
+            {
+                return _profiler;
+            }
+            set
+            {
+                _profiler = value;
+
+                foreach (var node in _nodes)
+                    node.Entry.Profiler = _profiler;
+                
+            }
+        }
+
         public string Name { get; }
-        public IActionProfiler<TTickData> Profiler { get; set; }
 
         public RandomSelectNode(string name)
         {

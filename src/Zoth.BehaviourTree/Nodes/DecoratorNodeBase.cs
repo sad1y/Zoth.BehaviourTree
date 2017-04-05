@@ -9,7 +9,20 @@ namespace Zoth.BehaviourTree.Nodes
     {
         public string Name { get; }
 
-        public IActionProfiler<TTickData> Profiler { get; set; }
+        private ITickProfiler<TTickData> _profiler;
+
+        public ITickProfiler<TTickData> Profiler {
+            get {
+                return _profiler;
+            }
+            set
+            {
+                _profiler = value;
+
+                if(DecoratedNode != null)
+                    DecoratedNode.Profiler = _profiler;
+            }
+        }
 
         protected IBehaviourTreeNode<TTickData, TState> DecoratedNode;
 
@@ -37,6 +50,8 @@ namespace Zoth.BehaviourTree.Nodes
         {
             if (DecoratedNode != null)
                 throw new BehaviourTreeException(ExceptionMessages.СantDecorateMoreThanOneNode);
+
+            node.Profiler = Profiler;
 
             DecoratedNode = node ?? throw new ArgumentNullException(nameof(node));
         }

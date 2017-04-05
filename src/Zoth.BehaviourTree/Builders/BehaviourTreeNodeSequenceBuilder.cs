@@ -4,7 +4,7 @@ namespace Zoth.BehaviourTree.Builders
 {
     public class BehaviourTreeNodeSequenceBuilder<TTickData, TState>
     {
-        private IBehaviourTreeNodeSequence<TTickData, TState> _parentNode;
+        private readonly IBehaviourTreeNodeSequence<TTickData, TState> _parentNode;
 
         public BehaviourTreeNodeSequenceBuilder(IBehaviourTreeNodeSequence<TTickData, TState> parentNode)
         {
@@ -14,10 +14,19 @@ namespace Zoth.BehaviourTree.Builders
             _parentNode = parentNode;
         }
 
+        public BehaviourTreeNodeSequenceBuilder<TTickData, TState> Profiler(ITickProfiler<TTickData> profiler)
+        {
+            _profiler = profiler;
+
+            return this;
+        }
+
         public BehaviourTreeNodeSequenceBuilder<TTickData, TState> Add(IBehaviourTreeNode<TTickData, TState> node)
         {
             if(node == null)
                 throw new ArgumentNullException(nameof(node));
+
+            node.Profiler = _profiler;
 
             _parentNode.AddNode(node);
 
@@ -33,6 +42,8 @@ namespace Zoth.BehaviourTree.Builders
 
             if(config == null)
                 throw new ArgumentNullException(nameof(config));
+
+            node.Profiler = _profiler;
 
             _parentNode.AddNode(node);
 
@@ -51,6 +62,8 @@ namespace Zoth.BehaviourTree.Builders
             if (config == null)
                 throw new ArgumentNullException(nameof(config));
 
+            node.Profiler = _profiler;
+
             _parentNode.AddNode(node);
 
             config(new BehaviourTreeNodeRandomBuilder<TTickData, TState>(node));
@@ -67,6 +80,8 @@ namespace Zoth.BehaviourTree.Builders
 
             if (config == null)
                 throw new ArgumentNullException(nameof(config));
+
+            node.Profiler = _profiler;
 
             _parentNode.AddNode(node);
 

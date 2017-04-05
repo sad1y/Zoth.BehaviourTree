@@ -1,6 +1,6 @@
 ﻿namespace Zoth.BehaviourTree
 {
-    public interface IActionProfiler<TTickData>
+    public interface ITickProfiler<TTickData>
     {
         void LogExecutingAction(string actionName, TTickData tick);
         void LogExecutedAction(string actionName, TTickData tick, BehaviourTreeState nodeState);

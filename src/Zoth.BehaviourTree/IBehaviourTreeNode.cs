@@ -6,7 +6,7 @@ namespace Zoth.BehaviourTree
     {
         string Name { get; }
 
-        IActionProfiler<TTickData> Profiler { get; set; }
+        ITickProfiler<TTickData> Profiler { get; set; }
 
         Func<TTickData, TState, BehaviourTreeState> Compile();
     }
