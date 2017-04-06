@@ -4,7 +4,7 @@ namespace Zoth.BehaviourTree.Nodes
 {
     public class SucceederNode<TTick, TState> : DecoratorNodeBase<TTick, TState>
     {
-        public SucceederNode() : base("Succeeder")
+        public SucceederNode() : base("succeeder")
         { }
 
         protected override Func<TTick, TState, BehaviourTreeState> CompileInternal()
