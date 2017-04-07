@@ -29,8 +29,8 @@ namespace Zoth.BehaviourTree.Tests
 
             Assert.Throws<BehaviourTreeException>(() =>
             {
-                invert.AddNode(mockNode.Object);
-                invert.AddNode(mockNode.Object);
+                invert.Decorate(mockNode.Object);
+                invert.Decorate(mockNode.Object);
             });
         }
 
@@ -38,7 +38,7 @@ namespace Zoth.BehaviourTree.Tests
         public void ExecutionResult(IBehaviourTreeNode<int, int> node, BehaviourTreeState expectedState)
         {
             var invert = new InverterNode<int, int>();
-            invert.AddNode(node);
+            invert.Decorate(node);
 
             var func = invert.Compile();
             var state = func(0, 0);
