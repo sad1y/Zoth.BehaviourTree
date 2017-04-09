@@ -54,6 +54,8 @@ namespace Zoth.BehaviourTree.Nodes
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
 
+            node.Profiler = _profiler;
+
             _nodes.Add(node);
         }
 
