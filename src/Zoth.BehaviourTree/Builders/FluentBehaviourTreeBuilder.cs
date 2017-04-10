@@ -94,7 +94,7 @@ namespace Zoth.BehaviourTree.Builders
             Root(root, config);
         }
 
-        public Func<TTickData, TState, BehaviourTreeState> Build()
+        public IBehaviourTreeNode<TTickData, TState> Build()
         {
             if (_root == null)
                 throw new BehaviourTreeBuilderException("cant build whitout root");
@@ -102,7 +102,7 @@ namespace Zoth.BehaviourTree.Builders
             if (_profiler != null)
                 _root.Profiler = _profiler;
 
-            return _root.Compile();
+            return _root;
         }
     }
 }
