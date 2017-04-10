@@ -23,7 +23,7 @@ namespace Zoth.BehaviourTree.Nodes
 
         public Func<TTickData, TState, BehaviourTreeState> Compile()
         {
-            return Profiler.Wrap(Name, _action);
+            return Profiler.Decorate(Name, _action);
         }
     }
 }

@@ -61,7 +61,7 @@ namespace Zoth.BehaviourTree.Nodes
 
             var func = compiler.Compile();
 
-            return Profiler.Wrap(Name, func, true);
+            return Profiler.Decorate(Name, func, true);
         }
     }
 }
