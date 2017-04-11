@@ -18,10 +18,10 @@ namespace Zoth.BehaviourTree.Extentions
 
                 var nodeState = func(tick, state);
 
-                profiler.LogExecutedAction(funcName, tick, nodeState);
-
                 if (container)
                     profiler.LevelUp();
+
+                profiler.LogExecutedAction(funcName, tick, nodeState);
 
                 return nodeState;
             };
