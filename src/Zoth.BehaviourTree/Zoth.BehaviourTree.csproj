@@ -51,11 +51,11 @@
     <Compile Include="Extentions\BehaviourTreeNodeRandomBuilderExtentions.cs" />
     <Compile Include="Extentions\BehaviourTreeNodeSequenceBuilderExtentions.cs" />
     <Compile Include="Extentions\ProfilerExtentions.cs" />
-    <Compile Include="IActionProfiler.cs" />
     <Compile Include="IBehaviourTreeNodeDecorator.cs" />
     <Compile Include="IBehaviourTreeNode.cs" />
     <Compile Include="IBehaviourTreeNodeRandom.cs" />
     <Compile Include="IBehaviourTreeNodeSequence.cs" />
+    <Compile Include="ITickProfiler.cs" />
     <Compile Include="Nodes\ActionNode.cs" />
     <Compile Include="Nodes\DecoratorNodeBase.cs" />
     <Compile Include="Nodes\InverterNode.cs" />

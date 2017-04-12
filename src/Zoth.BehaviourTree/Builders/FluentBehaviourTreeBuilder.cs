@@ -46,48 +46,48 @@ namespace Zoth.BehaviourTree.Builders
 
         const string RootName = "root";
 
-        public void Select(Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config, bool stateful = true)
+        public void Select(Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config, bool stateful = false)
         {
             Select(RootName, config, stateful);
         }
 
-        public void Select(string name, Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config, bool stateful = true)
+        public void Select(string name, Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config, bool stateful = false)
         {
             var root = new SelectNode<TTickData, TState>(name, stateful);
 
             Root(root, config);
         }
 
-        public void Sequence(Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config, bool stateful = true)
+        public void Sequence(Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config, bool stateful = false)
         {
             Sequence(RootName, config, stateful);
         }
 
-        public void Sequence(string name, Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config, bool stateful = true)
+        public void Sequence(string name, Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config, bool stateful = false)
         {
             var root = new SequenceNode<TTickData, TState>(name, stateful);
 
             Root(root, config);
         }
 
-        public void RandomSequence(Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config, bool stateful = true)
+        public void RandomSequence(Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config, bool stateful = false)
         {
             RandomSequence(RootName, config, stateful);
         }
 
-        public void RandomSequence(string name, Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config, bool stateful = true)
+        public void RandomSequence(string name, Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config, bool stateful = false)
         {
             var root = new SequenceNode<TTickData, TState>(name, stateful);
 
             Root(root, config);
         }
 
-        public void RandomSelect(Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config, bool stateful = true)
+        public void RandomSelect(Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config, bool stateful = false)
         {
             RandomSelect(RootName, config, stateful);
         }
 
-        public void RandomSelect(string name, Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config, bool stateful = true)
+        public void RandomSelect(string name, Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config, bool stateful = false)
         {
             var root = new SequenceNode<TTickData, TState>(RootName, stateful);
 
