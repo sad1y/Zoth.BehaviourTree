@@ -71,7 +71,7 @@ namespace Zoth.BehaviourTree.Extentions
             return builder.Add(newNode, config);
         }
 
-        public static BehaviourTreeNodeSequenceBuilder<TTickData, TState> Inventer<TTickData, TState>(
+        public static BehaviourTreeNodeSequenceBuilder<TTickData, TState> Inverter<TTickData, TState>(
             this BehaviourTreeNodeSequenceBuilder<TTickData, TState> builder,
             Action<BehaviourTreeNodeDecoratorBuilder<TTickData, TState>> config)
         {

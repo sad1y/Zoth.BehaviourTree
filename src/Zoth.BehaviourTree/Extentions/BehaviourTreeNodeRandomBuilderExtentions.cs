@@ -78,7 +78,7 @@ namespace Zoth.BehaviourTree.Extentions
             return builder.Add(probability, newNode, config);
         }
 
-        public static BehaviourTreeNodeRandomBuilder<TTickData, TState> Inventer<TTickData, TState>(
+        public static BehaviourTreeNodeRandomBuilder<TTickData, TState> Inverter<TTickData, TState>(
             this BehaviourTreeNodeRandomBuilder<TTickData, TState> builder,
             uint probability,
             Action<BehaviourTreeNodeDecoratorBuilder<TTickData, TState>> config)
