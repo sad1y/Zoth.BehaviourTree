@@ -80,20 +80,22 @@ namespace Zoth.BehaviourTree.Extentions
 
         public static BehaviourTreeNodeRandomBuilder<TTickData, TState> Inverter<TTickData, TState>(
             this BehaviourTreeNodeRandomBuilder<TTickData, TState> builder,
+            string name,
             uint probability,
             Action<BehaviourTreeNodeDecoratorBuilder<TTickData, TState>> config)
         {
-            var newNode = new InverterNode<TTickData, TState>();
+            var newNode = new InverterNode<TTickData, TState>(name);
 
             return builder.Add(probability, newNode, config);
         }
 
         public static BehaviourTreeNodeRandomBuilder<TTickData, TState> Succeeder<TTickData, TState>(
             this BehaviourTreeNodeRandomBuilder<TTickData, TState> builder,
+            string name,
             uint probability,
             Action<BehaviourTreeNodeDecoratorBuilder<TTickData, TState>> config)
         {
-            var newNode = new SucceederNode<TTickData, TState>();
+            var newNode = new SucceederNode<TTickData, TState>(name);
 
             return builder.Add(probability, newNode, config);
         }

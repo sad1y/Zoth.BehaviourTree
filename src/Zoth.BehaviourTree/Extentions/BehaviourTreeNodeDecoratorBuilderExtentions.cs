@@ -78,7 +78,7 @@ namespace Zoth.BehaviourTree.Extentions
                 Action<BehaviourTreeNodeDecoratorBuilder<TTickData, TState>> config
             )
         {
-            var newNode = new InverterNode<TTickData, TState>();
+            var newNode = new InverterNode<TTickData, TState>(name);
 
             builder.Decorate(newNode, config);
         }
@@ -89,7 +89,7 @@ namespace Zoth.BehaviourTree.Extentions
                 Action<BehaviourTreeNodeDecoratorBuilder<TTickData, TState>> config
             )
         {
-            var newNode = new SucceederNode<TTickData, TState>();
+            var newNode = new SucceederNode<TTickData, TState>(name);
 
             builder.Decorate(newNode, config);
         }

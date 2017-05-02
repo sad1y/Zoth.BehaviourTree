@@ -46,8 +46,10 @@ namespace Zoth.BehaviourTree.Tests
 
             var action = builder.Build();
 
+            var compiled = action.Compile();
+
             Assert.NotNull(action);
-            Assert.Equal(BehaviourTreeState.Running, action(1, 1));
+            Assert.Equal(BehaviourTreeState.Running, compiled(1, 1));
         }
     }
 }
