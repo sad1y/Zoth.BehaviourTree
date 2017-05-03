@@ -43,7 +43,7 @@ namespace Zoth.BehaviourTree.Nodes
 
             var func = CompileInternal();
 
-            return Profiler.Decorate(Name, func);
+            return Profiler.Decorate(Name, func, container: true);
         }
 
         public void Decorate(IBehaviourTreeNode<TTickData, TState> node)
