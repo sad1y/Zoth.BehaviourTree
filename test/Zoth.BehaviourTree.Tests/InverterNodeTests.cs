@@ -46,6 +46,25 @@ namespace Zoth.BehaviourTree.Tests
             Assert.Equal(expectedState, state);
         }
 
+        [Fact]
+        public void ProfilerResult()
+        {
+            var invert = new InverterNode<int, int>();
+            var profiler = new LogProfiler<int>();
+
+            var node = new ActionNode<int, int>("test", (p1, p2)=> {
+                return BehaviourTreeState.Success;
+            });
+
+            invert.Decorate(node);
+            invert.Profiler = profiler;
+
+            var func = invert.Compile();
+            var state = func(0, 0);
+
+            // Assert.Equal(expectedState, state);
+        }
+
         public static IEnumerable<object[]> ExecutionData
         {
             get

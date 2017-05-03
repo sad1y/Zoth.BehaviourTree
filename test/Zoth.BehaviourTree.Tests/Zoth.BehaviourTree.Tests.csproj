@@ -67,6 +67,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomSelectNodeTests.cs" />
     <Compile Include="RandomSequenceTests.cs" />
+    <Compile Include="ReportProfiler.cs" />
     <Compile Include="SequenceNodeTests.cs" />
     <Compile Include="SelectNodeTests.cs" />
     <Compile Include="SucceederTests.cs" />

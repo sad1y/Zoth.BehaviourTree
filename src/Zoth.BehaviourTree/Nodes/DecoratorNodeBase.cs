@@ -18,9 +18,6 @@ namespace Zoth.BehaviourTree.Nodes
             set
             {
                 _profiler = value;
-
-                if(DecoratedNode != null)
-                    DecoratedNode.Profiler = _profiler;
             }
         }
 
@@ -40,6 +37,9 @@ namespace Zoth.BehaviourTree.Nodes
         {
             if (DecoratedNode == null)
                 throw new BehaviourTreeException(ExceptionMessages.DecoratedNodeNotProvided);
+
+            if (DecoratedNode != null)
+                DecoratedNode.Profiler = _profiler;
 
             var func = CompileInternal();
 
