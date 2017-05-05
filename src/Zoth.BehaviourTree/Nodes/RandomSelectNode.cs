@@ -13,23 +13,7 @@ namespace Zoth.BehaviourTree.Nodes
         private readonly IList<RandomEntry<IBehaviourTreeNode<TTickData, TState>>> _nodes
             = new List<RandomEntry<IBehaviourTreeNode<TTickData, TState>>>();
 
-        private ITickProfiler<TTickData> _profiler;
-
-        public ITickProfiler<TTickData> Profiler
-        {
-            get
-            {
-                return _profiler;
-            }
-            set
-            {
-                _profiler = value;
-
-                foreach (var node in _nodes)
-                    node.Entry.Profiler = _profiler;
-                
-            }
-        }
+        public ITickProfiler<TTickData> Profiler { get; set; }
 
         public string Name { get; }
 
@@ -46,8 +30,6 @@ namespace Zoth.BehaviourTree.Nodes
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
 
-            node.Profiler = _profiler;
-
             _nodes.Add(new RandomEntry<IBehaviourTreeNode<TTickData, TState>>(probality, node));
         }
 
@@ -55,6 +37,9 @@ namespace Zoth.BehaviourTree.Nodes
         {
             if (!_nodes.Any())
                 throw new BehaviourTreeCompilationException(ExceptionMessages.ChildShouldNotBeEmpty);
+
+            foreach (var node in _nodes)
+                node.Entry.Profiler = Profiler;
 
             var compiler = new RandomCallCompiler<TTickData, TState>(_nodes.AsEnumerable(),
                 (nodeState) => nodeState == BehaviourTreeState.Success);
