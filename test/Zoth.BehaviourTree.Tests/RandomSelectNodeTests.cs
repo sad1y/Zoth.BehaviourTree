@@ -53,7 +53,7 @@ namespace Zoth.BehaviourTree.Tests
             Assert.True(condition);
         }
 
-        [Theory, MemberData(nameof(Data))]
+        [Theory, MemberData(nameof(GetStatelessData))]
         public void VerifyExecution(IEnumerable<IBehaviourTreeNode<int, int>> nodes, BehaviourTreeState expectedState)
         {
             var selectNode = new RandomSelectNode<int, int>("test");
@@ -70,42 +70,85 @@ namespace Zoth.BehaviourTree.Tests
             Assert.Equal(expectedState, state);
         }
 
-        public static IEnumerable<object[]> Data
+        [Fact]
+        public void VerifyStatefulExecution()
         {
-            get
+            var node1CallCount = 0;
+            var node2CallCount = 0;
+            var node3CallCount = 0;
+
+            var node1 = new Mock<IBehaviourTreeNode<int, int>>();
+            
+            node1.Setup(f => f.Compile()).Returns((tick, state) => {
+                node1CallCount++;
+                return BehaviourTreeState.Failure;
+            });
+
+            var node2 = new Mock<IBehaviourTreeNode<int, int>>();
+
+            node2.Setup(f => f.Compile()).Returns((tick, state) => {
+                node2CallCount++;
+                return BehaviourTreeState.Failure;
+            });
+
+            var node3 = new Mock<IBehaviourTreeNode<int, int>>();
+
+            node3.Setup(f => f.Compile()).Returns((tick, state) => {
+                node3CallCount++;
+                return node3CallCount > 2 ? BehaviourTreeState.Failure : BehaviourTreeState.Running;
+            });
+
+            var selectNode = new RandomSelectNode<int, int>("test");
+
+            selectNode.AddNode(node1.Object, 33);
+            selectNode.AddNode(node2.Object, 33);
+            selectNode.AddNode(node3.Object, 33);
+
+            var func = selectNode.Compile();
+
+            while(true)
             {
-                var success = new Mock<IBehaviourTreeNode<int, int>>();
-                success.Setup(f => f.Compile()).Returns((tick, state) => BehaviourTreeState.Success);
+                if (func(1, 1) != BehaviourTreeState.Running) break;
+            }
 
-                var fail = new Mock<IBehaviourTreeNode<int, int>>();
-                fail.Setup(f => f.Compile()).Returns((tick, state) => BehaviourTreeState.Failure);
+            Assert.Equal(1, node1CallCount);
+            Assert.Equal(1, node2CallCount);
+            Assert.Equal(3, node3CallCount);
+        }
 
-                var running = new Mock<IBehaviourTreeNode<int, int>>();
-                running.Setup(f => f.Compile()).Returns((tick, state) => BehaviourTreeState.Running);
+        public static IEnumerable<object[]> GetStatelessData()
+        {
+            var success = new Mock<IBehaviourTreeNode<int, int>>();
+            success.Setup(f => f.Compile()).Returns((tick, state) => BehaviourTreeState.Success);
 
-                var error = new Mock<IBehaviourTreeNode<int, int>>();
-                error.Setup(f => f.Compile()).Returns((tick, state) => BehaviourTreeState.Error);
+            var fail = new Mock<IBehaviourTreeNode<int, int>>();
+            fail.Setup(f => f.Compile()).Returns((tick, state) => BehaviourTreeState.Failure);
 
-                yield return new object[] {
+            var running = new Mock<IBehaviourTreeNode<int, int>>();
+            running.Setup(f => f.Compile()).Returns((tick, state) => BehaviourTreeState.Running);
+
+            var error = new Mock<IBehaviourTreeNode<int, int>>();
+            error.Setup(f => f.Compile()).Returns((tick, state) => BehaviourTreeState.Error);
+
+            yield return new object[] {
                     new [] { error.Object },
                     BehaviourTreeState.Error
                 };
 
-                yield return new object[] {
+            yield return new object[] {
                     new [] { fail.Object, fail.Object, success.Object },
                     BehaviourTreeState.Success
                 };
 
-                yield return new object[] {
+            yield return new object[] {
                     new [] { fail.Object, fail.Object , fail.Object },
                     BehaviourTreeState.Failure
                 };
 
-                yield return new object[] {
+            yield return new object[] {
                     new [] { fail.Object, running.Object, fail.Object },
                     BehaviourTreeState.Running
                 };
-            }
         }
     }
 }
