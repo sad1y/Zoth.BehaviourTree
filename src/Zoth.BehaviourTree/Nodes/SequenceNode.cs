@@ -49,10 +49,10 @@ namespace Zoth.BehaviourTree.Nodes
             foreach (var node in _nodes)
                 node.Profiler = Profiler;
 
-            var callChainCompiler = new WrapCallCompiler<TTickData, TState>(
+            var compiler = new SequentialCallCompiler<TTickData, TState>(
                 _nodes, (nodeState) => nodeState != BehaviourTreeState.Success);
 
-            var func = callChainCompiler.Compile(Stateful);
+            var func = compiler.Compile(Stateful);
 
             return Profiler.Decorate(Name, func, true);
         }
