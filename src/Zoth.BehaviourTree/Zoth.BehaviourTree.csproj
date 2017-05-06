@@ -46,6 +46,7 @@
     <Compile Include="Builders\FluentBehaviourTreeBuilder.cs" />
     <Compile Include="Compilation\RandomCallCompiler.cs" />
     <Compile Include="Compilation\SequentialCallCompiler.cs" />
+    <Compile Include="Compilation\WrapCallCompiler.cs" />
     <Compile Include="Exceptions\BehaviourTreeBuilderException.cs" />
     <Compile Include="Exceptions\BehaviourTreeCompilationException.cs" />
     <Compile Include="Exceptions\BehaviourTreeException.cs" />
@@ -73,7 +74,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
-    <Compile Include="RndXorshift.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\ExceptionMessages.resx">
@@ -86,4 +86,9 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties BuildVersion_StartDate="2000/1/1" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

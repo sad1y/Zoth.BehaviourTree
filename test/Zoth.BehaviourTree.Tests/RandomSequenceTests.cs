@@ -53,6 +53,52 @@ namespace Zoth.BehaviourTree.Tests
             Assert.True(condition);
         }
 
+        [Fact]
+        public void VerifyStatefulExecution()
+        {
+            var node1CallCount = 0;
+            var node2CallCount = 0;
+            var node3CallCount = 0;
+
+            var node1 = new Mock<IBehaviourTreeNode<int, int>>();
+
+            node1.Setup(f => f.Compile()).Returns((tick, state) => {
+                node1CallCount++;
+                return BehaviourTreeState.Success;
+            });
+
+            var node2 = new Mock<IBehaviourTreeNode<int, int>>();
+
+            node2.Setup(f => f.Compile()).Returns((tick, state) => {
+                node2CallCount++;
+                return BehaviourTreeState.Success;
+            });
+
+            var node3 = new Mock<IBehaviourTreeNode<int, int>>();
+
+            node3.Setup(f => f.Compile()).Returns((tick, state) => {
+                node3CallCount++;
+                return node3CallCount > 2 ? BehaviourTreeState.Success : BehaviourTreeState.Running;
+            });
+
+            var selectNode = new RandomSequenceNode<int, int>("test", stateful: true);
+
+            selectNode.AddNode(node1.Object, 33);
+            selectNode.AddNode(node2.Object, 33);
+            selectNode.AddNode(node3.Object, 33);
+
+            var func = selectNode.Compile();
+
+            while (true)
+            {
+                if (func(1, 1) != BehaviourTreeState.Running) break;
+            }
+
+            Assert.Equal(1, node1CallCount);
+            Assert.Equal(1, node2CallCount);
+            Assert.Equal(3, node3CallCount);
+        }
+
         [Theory, MemberData(nameof(Data))]
         public void VerifyExecution(IEnumerable<IBehaviourTreeNode<int, int>> nodes, BehaviourTreeState expectedState)
         {

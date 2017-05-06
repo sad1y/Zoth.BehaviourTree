@@ -98,7 +98,7 @@ namespace Zoth.BehaviourTree.Tests
                 return node3CallCount > 2 ? BehaviourTreeState.Failure : BehaviourTreeState.Running;
             });
 
-            var selectNode = new RandomSelectNode<int, int>("test");
+            var selectNode = new RandomSelectNode<int, int>("test", stateful: true);
 
             selectNode.AddNode(node1.Object, 33);
             selectNode.AddNode(node2.Object, 33);

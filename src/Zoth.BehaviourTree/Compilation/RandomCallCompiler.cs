@@ -10,54 +10,127 @@ namespace Zoth.BehaviourTree.Compilation
         private readonly IEnumerable<RandomEntry<IBehaviourTreeNode<TTick, TState>>> _entries;
         private readonly Func<BehaviourTreeState, bool> _terminationСondition;
 
+        private readonly Random _roll = new Random(64894121);
+
         public RandomCallCompiler(
             IEnumerable<RandomEntry<IBehaviourTreeNode<TTick, TState>>> entries,
             Func<BehaviourTreeState, bool> terminationСondition)
         {
+            if (entries == null)
+                throw new ArgumentNullException(nameof(entries));
+
+            if (!entries.Any())
+                throw new ArgumentException(nameof(entries));
+
             _entries = entries;
             _terminationСondition = terminationСondition;
         }
 
-        public Func<TTick, TState, BehaviourTreeState> Compile()
+        public Func<TTick, TState, BehaviourTreeState> Compile(bool stateful = false)
         {
-            var map = _entries.Select(f => new { Probability = (int)f.Probability, Action = f.Entry.Compile() });
+            var nodes = _entries
+              .Select(entry => new CompailedActionProbability(entry.Probability, entry.Entry.Compile()))
+              .ToArray();
 
-            var shuffledByProbability = map
-                .OrderByDescending(f => GetRandom(f.Probability))
-                .Select(f => f.Action);
+            var executedNodes = new bool[nodes.Length];
+
+            var totalSum = (uint)nodes.Sum(entry => entry.Probability);
+            var remainder = totalSum;
+
+            Func<TTick, TState, BehaviourTreeState> runningAction = null;
+
+            Func<TTick, TState, BehaviourTreeState> GetNextAction()
+            {
+                if (remainder == 0)
+                {
+                    return null;
+                }
+
+                var roll = GetRandom((int)remainder);
+
+                for (int i = 0; i < nodes.Length; i++)
+                {
+                    if (executedNodes[i]) continue;
+
+                    var entry = nodes[i];
+
+                    // if probability in range and this action was not executed before
+                    if (entry.Probability >= roll)
+                    {
+                        // if we found an acceptable entry
+                        remainder -= entry.Probability;
+                        executedNodes[i] = true;
+                        return entry.Action;
+                    }
+
+                    roll = roll - entry.Probability;
+                }
+
+                // probably should not happens
+                return null;
+            }
+
+            void Reset()
+            {
+                for (int i = 0; i < nodes.Length; i++)
+                {
+                    executedNodes[i] = false;
+                }
+
+                remainder = totalSum;
+            }
 
             return (tick, state) =>
             {
-                var previousCallState = BehaviourTreeState.Error;
+                // if previous action not null take it if not take next
+                var action = runningAction ?? GetNextAction();
 
-                foreach (var node in shuffledByProbability)
+                var nodeState = BehaviourTreeState.Error;
+
+                while (action != null)
                 {
-                    var nodeState = node(tick, state);
+                    nodeState = action(tick, state);
 
-                    if (
-                        nodeState == BehaviourTreeState.Running ||
-                        nodeState == BehaviourTreeState.Error ||
-                        _terminationСondition(nodeState))
+                    // if state running always stick with that action 
+                    if (nodeState == BehaviourTreeState.Running && stateful)
                     {
+                        runningAction = action;
                         return nodeState;
                     }
 
-                    previousCallState = nodeState;
+                    // if state error or termination condition is fulfilled and call is not stateful
+                    if (nodeState == BehaviourTreeState.Running || 
+                        nodeState == BehaviourTreeState.Error || 
+                        _terminationСondition(nodeState))
+                    {
+                        break;
+                    }
+
+                    action = GetNextAction();
                 }
 
-                return previousCallState;
+                Reset();
+                runningAction = null;
+
+                return nodeState;
             };
         }
 
-        private static Random Rng = new Random();
-        private static object syncObject = new object();
-
-        private static int GetRandom(int max)
+        private class CompailedActionProbability
         {
-            lock (syncObject)
+            public Func<TTick, TState, BehaviourTreeState> Action { get; }
+            public uint Probability { get; }
+
+            public CompailedActionProbability(uint probability, Func<TTick, TState, BehaviourTreeState> action)
             {
-                return Rng.Next(max);
+                Probability = probability;
+                Action = action;
             }
+        }
+
+        private uint GetRandom(int max)
+        {
+            return (uint)_roll.Next(0, max);
         }
     }
 }

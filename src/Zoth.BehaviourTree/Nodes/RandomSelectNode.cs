@@ -12,16 +12,18 @@ namespace Zoth.BehaviourTree.Nodes
     {
         private readonly IList<RandomEntry<IBehaviourTreeNode<TTickData, TState>>> _nodes
             = new List<RandomEntry<IBehaviourTreeNode<TTickData, TState>>>();
+        private bool _stateful;
 
         public ITickProfiler<TTickData> Profiler { get; set; }
 
         public string Name { get; }
 
-        public RandomSelectNode(string name)
+        public RandomSelectNode(string name, bool stateful = false)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name));
 
+            _stateful = stateful;
             Name = name;
         }
 
@@ -44,7 +46,7 @@ namespace Zoth.BehaviourTree.Nodes
             var compiler = new RandomCallCompiler<TTickData, TState>(_nodes.AsEnumerable(),
                 (nodeState) => nodeState == BehaviourTreeState.Success);
 
-            var func = compiler.Compile();
+            var func = compiler.Compile(_stateful);
 
             return Profiler.Decorate(Name, func, true);
         }

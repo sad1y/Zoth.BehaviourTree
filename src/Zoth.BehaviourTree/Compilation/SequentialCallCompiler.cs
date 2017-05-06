@@ -6,62 +6,54 @@ namespace Zoth.BehaviourTree.Compilation
 {
     internal class SequentialCallCompiler<TTick, TState>
     {
-        private Func<TTick, TState, BehaviourTreeState> _root = null;
-        private Func<TTick, TState, BehaviourTreeState> _runningAction = null;
         private Func<BehaviourTreeState, bool> _terminationCondition = null;
 
-        private IEnumerable<IBehaviourTreeNode<TTick, TState>> _tree;
+        private IEnumerable<IBehaviourTreeNode<TTick, TState>> _nodes;
 
         public SequentialCallCompiler(
-            IEnumerable<IBehaviourTreeNode<TTick, TState>> tree, 
+            IEnumerable<IBehaviourTreeNode<TTick, TState>> nodes,
             Func<BehaviourTreeState, bool> terminationCondition)
         {
-            _tree = tree;
+            _nodes = nodes;
             _terminationCondition = terminationCondition;
         }
 
         public Func<TTick, TState, BehaviourTreeState> Compile(bool stateful = false)
         {
-            // build a sequence of calls
-            foreach (var node in _tree.Reverse())
-            {
-                var compiledNode = node.Compile();
-                _root = WrapNextCall(compiledNode, _root, _terminationCondition);
-            }
+            var pointer = 0;
+
+            var callSequence = _nodes
+                .Select(node => node.Compile())
+                .ToArray();
 
             return (tick, state) =>
             {
-                var entryPoint = _runningAction != null && stateful ? 
-                    _runningAction : _root;
+                var nodeState = BehaviourTreeState.Error;
 
-                return entryPoint(tick, state);
-            };
-        }
-
-        private Func<TTick, TState, BehaviourTreeState> WrapNextCall(
-            Func<TTick, TState, BehaviourTreeState> action,
-            Func<TTick, TState, BehaviourTreeState> nextFunc,
-            Func<BehaviourTreeState, bool> terminationCondition)
-        {
-            return (tick, state) =>
-            {
-                var nodeState = action(tick, state);
-
-                if(nodeState == BehaviourTreeState.Running)
+                while(pointer < callSequence.Length)
                 {
-                    return nodeState;
+                    var action = callSequence[pointer];
+
+                    nodeState = action(tick, state);
+
+                    if (nodeState == BehaviourTreeState.Running && stateful)
+                    {
+                        return nodeState;
+                    }
+
+                    if (nodeState == BehaviourTreeState.Running ||
+                        nodeState == BehaviourTreeState.Error ||
+                        _terminationCondition(nodeState))
+                    {
+                        break;
+                    }
+
+                    pointer++;
                 }
 
-                if (nodeState == BehaviourTreeState.Error ||
-                    terminationCondition(nodeState))
-                {
-                    _runningAction = null;
-                    return nodeState;
-                }
+                pointer = 0;
 
-                _runningAction = nextFunc;
-
-                return nextFunc == null ? nodeState : nextFunc(tick, state);
+                return nodeState;
             };
         }
     }
