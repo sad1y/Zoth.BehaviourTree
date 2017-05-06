@@ -58,10 +58,11 @@ namespace Zoth.BehaviourTree.Extentions
             this BehaviourTreeNodeRandomBuilder<TTickData, TState> builder,
                 string name,
                 uint probability,
-                Action<BehaviourTreeNodeRandomBuilder<TTickData, TState>> config
+                Action<BehaviourTreeNodeRandomBuilder<TTickData, TState>> config,
+                bool stateful = false
             )
         {
-            var newNode = new RandomSequenceNode<TTickData, TState>(name);
+            var newNode = new RandomSequenceNode<TTickData, TState>(name, stateful);
 
             return builder.Add(probability, newNode, config);
         }
@@ -70,10 +71,11 @@ namespace Zoth.BehaviourTree.Extentions
           (this BehaviourTreeNodeRandomBuilder<TTickData, TState> builder,
               string name,
               uint probability,
-              Action<BehaviourTreeNodeRandomBuilder<TTickData, TState>> config
+              Action<BehaviourTreeNodeRandomBuilder<TTickData, TState>> config,
+              bool stateful = false
           )
         {
-            var newNode = new RandomSelectNode<TTickData, TState>(name);
+            var newNode = new RandomSelectNode<TTickData, TState>(name, stateful);
 
             return builder.Add(probability, newNode, config);
         }

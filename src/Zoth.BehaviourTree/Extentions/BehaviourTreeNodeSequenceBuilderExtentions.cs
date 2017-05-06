@@ -7,8 +7,8 @@ namespace Zoth.BehaviourTree.Extentions
     public static class BehaviourTreeNodeSequenceBuilderExtentions
     {
         public static BehaviourTreeNodeSequenceBuilder<TTickData, TState> Do<TTickData, TState>(
-            this BehaviourTreeNodeSequenceBuilder<TTickData, TState> builder, 
-            string name, 
+            this BehaviourTreeNodeSequenceBuilder<TTickData, TState> builder,
+            string name,
             Func<TTickData, TState, BehaviourTreeState> action)
         {
             var newNode = new ActionNode<TTickData, TState>(name, action);
@@ -17,8 +17,8 @@ namespace Zoth.BehaviourTree.Extentions
         }
 
         public static BehaviourTreeNodeSequenceBuilder<TTickData, TState> Condition<TTickData, TState>(
-            this BehaviourTreeNodeSequenceBuilder<TTickData, TState> builder, 
-            string name, 
+            this BehaviourTreeNodeSequenceBuilder<TTickData, TState> builder,
+            string name,
             Func<TTickData, TState, bool> predicate)
         {
             var newNode = new ActionNode<TTickData, TState>(name,
@@ -52,10 +52,11 @@ namespace Zoth.BehaviourTree.Extentions
         public static BehaviourTreeNodeSequenceBuilder<TTickData, TState> RandomSequence<TTickData, TState>(
             this BehaviourTreeNodeSequenceBuilder<TTickData, TState> builder,
                 string name,
-                Action<BehaviourTreeNodeRandomBuilder<TTickData, TState>> config
+                Action<BehaviourTreeNodeRandomBuilder<TTickData, TState>> config,
+                bool stateful = false
             )
         {
-            var newNode = new RandomSequenceNode<TTickData, TState>(name);
+            var newNode = new RandomSequenceNode<TTickData, TState>(name, stateful);
 
             return builder.Add(newNode, config);
         }
@@ -63,10 +64,11 @@ namespace Zoth.BehaviourTree.Extentions
         public static BehaviourTreeNodeSequenceBuilder<TTickData, TState> RandomSelect<TTickData, TState>
           (this BehaviourTreeNodeSequenceBuilder<TTickData, TState> builder,
               string name,
-              Action<BehaviourTreeNodeRandomBuilder<TTickData, TState>> config
+              Action<BehaviourTreeNodeRandomBuilder<TTickData, TState>> config,
+              bool stateful = false
           )
         {
-            var newNode = new RandomSelectNode<TTickData, TState>(name);
+            var newNode = new RandomSelectNode<TTickData, TState>(name, stateful);
 
             return builder.Add(newNode, config);
         }
