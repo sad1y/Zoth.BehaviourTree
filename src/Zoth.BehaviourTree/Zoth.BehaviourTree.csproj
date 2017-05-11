@@ -62,6 +62,7 @@
     <Compile Include="Nodes\ActionNode.cs" />
     <Compile Include="Nodes\DecoratorNodeBase.cs" />
     <Compile Include="Nodes\InverterNode.cs" />
+    <Compile Include="Nodes\ParallelNode.cs" />
     <Compile Include="Nodes\RandomSelectNode.cs" />
     <Compile Include="Nodes\RandomSequenceNode.cs" />
     <Compile Include="Nodes\SelectNode.cs" />
@@ -88,7 +89,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_StartDate="2000/1/1" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_StartDate="2000/1/1" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
