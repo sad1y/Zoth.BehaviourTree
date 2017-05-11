@@ -4,7 +4,7 @@ using Zoth.BehaviourTree.Nodes;
 
 namespace Zoth.BehaviourTree.Extentions
 {
-    public static class BehaviourTreeNodeRandomBuilderExtentions
+    public static class RandomNodeBuilderExtentions
     {
         public static BehaviourTreeNodeRandomBuilder<TTickData, TState> Do<TTickData, TState>
             (this BehaviourTreeNodeRandomBuilder<TTickData, TState> builder,
@@ -26,6 +26,19 @@ namespace Zoth.BehaviourTree.Extentions
         {
             return builder.Do(name, probability,
                 (tick, state) => predicate(tick, state) ? BehaviourTreeState.Success : BehaviourTreeState.Failure);
+        }
+
+        public static BehaviourTreeNodeRandomBuilder<TTickData, TState> Parallel<TTickData, TState>
+            (this BehaviourTreeNodeRandomBuilder<TTickData, TState> builder,
+                string name,
+                uint probability,
+                int successCount, int failureCount,
+                Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config
+            )
+        {
+            var newNode = new ParallelNode<TTickData, TState>(name, successCount, failureCount);
+
+            return builder.Add(probability, newNode, config);
         }
 
         public static BehaviourTreeNodeRandomBuilder<TTickData, TState> Select<TTickData, TState>

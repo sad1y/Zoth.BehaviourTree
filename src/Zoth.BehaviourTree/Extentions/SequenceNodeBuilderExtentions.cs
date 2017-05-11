@@ -4,7 +4,7 @@ using Zoth.BehaviourTree.Nodes;
 
 namespace Zoth.BehaviourTree.Extentions
 {
-    public static class BehaviourTreeNodeSequenceBuilderExtentions
+    public static class SequenceNodeBuilderExtentions
     {
         public static BehaviourTreeNodeSequenceBuilder<TTickData, TState> Do<TTickData, TState>(
             this BehaviourTreeNodeSequenceBuilder<TTickData, TState> builder,
@@ -27,6 +27,15 @@ namespace Zoth.BehaviourTree.Extentions
             builder.Add(newNode);
 
             return builder;
+        }
+
+        public static BehaviourTreeNodeSequenceBuilder<TTickData, TState> Parallel<TTickData, TState>(
+            this BehaviourTreeNodeSequenceBuilder<TTickData, TState> builder, string name, int successCount, int failureCount,
+            Action<BehaviourTreeNodeSequenceBuilder<TTickData, TState>> config)
+        {
+            var newNode = new ParallelNode<TTickData, TState>(name, successCount, failureCount);
+
+            return builder.Add(newNode, config);
         }
 
         public static BehaviourTreeNodeSequenceBuilder<TTickData, TState> Select<TTickData, TState>(

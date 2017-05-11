@@ -50,10 +50,10 @@
     <Compile Include="Exceptions\BehaviourTreeBuilderException.cs" />
     <Compile Include="Exceptions\BehaviourTreeCompilationException.cs" />
     <Compile Include="Exceptions\BehaviourTreeException.cs" />
-    <Compile Include="Extentions\BehaviourTreeNodeDecoratorBuilderExtentions.cs" />
-    <Compile Include="Extentions\BehaviourTreeNodeRandomBuilderExtentions.cs" />
-    <Compile Include="Extentions\BehaviourTreeNodeSequenceBuilderExtentions.cs" />
+    <Compile Include="Extentions\DecoratorNodeBuilderExtentions.cs" />
     <Compile Include="Extentions\ProfilerExtentions.cs" />
+    <Compile Include="Extentions\RandomNodeBuilderExtentions.cs" />
+    <Compile Include="Extentions\SequenceNodeBuilderExtentions.cs" />
     <Compile Include="IBehaviourTreeNodeDecorator.cs" />
     <Compile Include="IBehaviourTreeNode.cs" />
     <Compile Include="IBehaviourTreeNodeRandom.cs" />
@@ -89,7 +89,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_StartDate="2000/1/1" />
+      <UserProperties BuildVersion_StartDate="2000/1/1" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -126,6 +126,9 @@
   <data name="RandomEntryProbabilityEqualZero" xml:space="preserve">
     <value>probability must be greater than zero</value>
   </data>
+  <data name="ShouldContainsAtLeastTwoNode" xml:space="preserve">
+    <value>should contains at least two node</value>
+  </data>
   <data name="СantDecorateMoreThanOneNode" xml:space="preserve">
     <value>can't decorate more than one node</value>
   </data>

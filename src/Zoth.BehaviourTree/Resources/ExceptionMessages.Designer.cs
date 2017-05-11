@@ -88,6 +88,15 @@ namespace Zoth.BehaviourTree.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to should contains at least two node.
+        /// </summary>
+        internal static string ShouldContainsAtLeastTwoNode {
+            get {
+                return ResourceManager.GetString("ShouldContainsAtLeastTwoNode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to can&apos;t decorate more than one node.
         /// </summary>
         internal static string СantDecorateMoreThanOneNode {
